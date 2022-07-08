@@ -1,0 +1,16 @@
+PODS:
+  - MHSAnalytics (0.1.0)
+
+DEPENDENCIES:
+  - MHSAnalytics (from `../`)
+
+EXTERNAL SOURCES:
+  MHSAnalytics:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  MHSAnalytics: 25dd49497f9e47075f1a91d5caeab04f19785c3d
+
+PODFILE CHECKSUM: aab9beb6bd9e2451ade26e694d79836d5a4487a8
+
+COCOAPODS: 1.11.3

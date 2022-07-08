@@ -1,0 +1,6 @@
+framework module MHSAnalytics {
+  umbrella header "MHSAnalytics-umbrella.h"
+
+  export *
+  module * { export * }
+}
