@@ -246,4 +246,8 @@ static MHSAnalytics *sharedInstance = nil;
         [self flush];
     }
 }
+- (void)report
+{
+    [self flush];
+}
 @end

@@ -62,7 +62,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)trackWithEvent:(NSString *)eventType;
 - (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content;
 - (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context;
-
+//主动上报
+- (void)report;
 @end
 
 NS_ASSUME_NONNULL_END

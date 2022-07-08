@@ -21,6 +21,7 @@
 //    [[MHSAnalytics sharedInstance] updateUserTypeWithType:MHSAnalyticsUserTypeUser];//更新用户角色，根据业务需要
     [[MHSAnalytics sharedInstance] trackWithEvent:@""];//日志上报
 //    [[MHSAnalytics sharedInstance]  trackWithEvent:@"" content:@{} context:@{}];//带附加属性的上报
+//    [[MHSAnalytics sharedInstance] report];//主动上报
     return YES;
 }
 
