@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '10.0'
+
+target 'MHSAnalytics_Example' do
+  pod 'MHSAnalytics', :path => '../'
+
+  target 'MHSAnalytics_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
