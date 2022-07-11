@@ -1,6 +1,6 @@
 {
   "name": "MHSAnalytics",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "summary": "A short description of MHSAnalytics.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/Visual/MHSAnalytics",
@@ -9,11 +9,11 @@
     "file": "LICENSE"
   },
   "authors": {
-    "Visual": "980495918@qq.com"
+    "Visual": "980495917@qq.com"
   },
   "source": {
-    "git": "https://github.com/Visual/MHSAnalytics.git",
-    "tag": "0.1.0"
+    "git": "https://github.com/Mihuashi/MHSAnalytics-iOS.git",
+    "tag": "0.1.1"
   },
   "platforms": {
     "ios": "10.0"
