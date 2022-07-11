@@ -51,7 +51,7 @@ static NSUInteger const MHSAnalyticsDefalutFlushEventCount = 10;
 #pragma mark - 初始化
 static MHSAnalytics *sharedInstance = nil;
 + (void)startWithServerURL:(NSString *)urlString {
-    [MHSAnalytics startWithServerURL:urlString flushBulkSize:100 flushInterval:30];
+    [MHSAnalytics startWithServerURL:urlString flushBulkSize:20 flushInterval:120];
 }
 
 + (void)startWithServerURL:(NSString *)urlString flushBulkSize:(NSUInteger)bulkSize flushInterval:(NSUInteger)flushInterval
