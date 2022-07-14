@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "MHSAnalyticsDataContainer.h"
+#import "MHSAnalyticsConfig.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MHSAnalytics : NSObject
@@ -22,13 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  初始化SDK
  */
-+ (void)startWithServerURL:(NSString *)urlString;
-/**
- 初始化SDK
- @param bulkSize 多少条上报一次 默认100条
- @param flushInterval 多少秒上报一次 默认30S
- */
-+ (void)startWithServerURL:(NSString *)urlString flushBulkSize:(NSUInteger)bulkSize flushInterval:(NSUInteger)flushInterval;
++ (void)startWithConfigOptions:(MHSAnalyticsConfig *)config;
+
 /**
  向服务器发送本地数据
  */
@@ -56,14 +52,25 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
+#pragma mark - Track
 @interface MHSAnalytics (Track)
 //业务埋点
 - (void)trackWithEvent:(NSString *)eventType;
 - (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content;
-- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context;
+- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(nullable Class)cls;
 //主动上报
 - (void)report;
+@end
+
+#pragma mark - 曝光
+@interface MHSAnalytics (Exposure)
+//展示
+- (void)exposureShowWithEvent:(NSString *)eventType;
+//隐藏
+- (void)exposureHideWithEvent:(NSString *)eventType;
+- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(nullable Class)cls;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

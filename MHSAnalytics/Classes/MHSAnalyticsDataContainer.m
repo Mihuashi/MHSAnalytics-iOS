@@ -56,4 +56,18 @@
 {
     self.baseProperties[@"userType"] = (userType == MHSAnalyticsUserTypeArtist) ? @"artist" : @"user";
 }
+
+
+#pragma mark - setter
+- (void)setPageLocalURL:(NSString *)pageLocalURL
+{
+    NSData *jsonData = [NSData dataWithContentsOfFile:pageLocalURL];
+    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
+    if (data[@"PAGEPV"]) {
+        self.pageMap = data[@"PAGEPV"];
+    }
+    if (data[@"ignorePageList"]) {
+        self.ignorePageList = data[@"ignorePageList"];
+    }
+}
 @end

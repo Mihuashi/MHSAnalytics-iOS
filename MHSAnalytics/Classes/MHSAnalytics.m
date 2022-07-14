@@ -44,34 +44,35 @@ static NSUInteger const MHSAnalyticsDefalutFlushEventCount = 10;
 @property (nonatomic) BOOL applicationWillResignActive;
 /// 标记应用程序是否进入了后台  用来区分是不是从后台唤醒
 @property (nonatomic) BOOL applicationDidEnterBackground;
+
+//记录曝光的开始时间，如果少于1秒则不上报
+@property (nonatomic, strong) NSMutableDictionary *exposureTimer;
 @end
 
 @implementation MHSAnalytics
 
 #pragma mark - 初始化
 static MHSAnalytics *sharedInstance = nil;
-+ (void)startWithServerURL:(NSString *)urlString {
-    [MHSAnalytics startWithServerURL:urlString flushBulkSize:20 flushInterval:120];
-}
 
-+ (void)startWithServerURL:(NSString *)urlString flushBulkSize:(NSUInteger)bulkSize flushInterval:(NSUInteger)flushInterval
++ (void)startWithConfigOptions:(MHSAnalyticsConfig *)config
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedInstance = [[MHSAnalytics alloc] initWithServerURL:urlString flushBulkSize:bulkSize flushInterval:flushInterval];
+        sharedInstance = [[MHSAnalytics alloc] initWithConfig:config];
     });
 }
+
 
 + (MHSAnalytics *)sharedInstance {
     return sharedInstance;
 }
 
-- (instancetype)initWithServerURL:(NSString *)urlString flushBulkSize:(NSUInteger)bulkSize flushInterval:(NSUInteger)flushInterval{
+- (instancetype)initWithConfig:(MHSAnalyticsConfig *)config {
     self = [super init];
     if (self) {
         
-        _flushBulkSize = bulkSize;
-        _flushInterval = flushInterval;
+        _flushBulkSize = config.flushBulkSize;
+        _flushInterval = config.flushInterval;
 
         NSString *queueLabel = [NSString stringWithFormat:@"cn.sensorsdata.%@.%p", self.class, self];
         _serialQueue = dispatch_queue_create([queueLabel UTF8String], DISPATCH_QUEUE_SERIAL);
@@ -79,9 +80,11 @@ static MHSAnalytics *sharedInstance = nil;
 
         // 初始化 SensorsAnalyticsDatabase 类的对象，使用默认路径
         _database = [[MHSAnalyticsDatabase alloc] init];
-
         
-        _network = [[MHSAnalyticsNetwork alloc] initWithServerURL:[NSURL URLWithString:urlString]];
+        //page页面路径，存储page映射关系及黑名单
+        [MHSAnalyticsDataContainer dataContainer].pageLocalURL = config.pageLocalURL;
+        
+        _network = [[MHSAnalyticsNetwork alloc] initWithServerURL:[NSURL URLWithString:config.serverURL]];
 
         _isOpenAnalytics = YES;//默认打开上传
         _isOpenPrivnt = YES;//默认打开控制台打印
@@ -213,10 +216,21 @@ static MHSAnalytics *sharedInstance = nil;
     // 开始计时器
     [self startFlushTimer];
 }
+
+#pragma mark - Property
++ (double)currentTime {
+    return [[NSDate date] timeIntervalSince1970];
+}
+
++ (double)systemUpTime {
+    return NSProcessInfo.processInfo.systemUptime;
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
 @end
 
 
@@ -224,19 +238,19 @@ static MHSAnalytics *sharedInstance = nil;
 @implementation MHSAnalytics (Track)
 
 - (void)trackWithEvent:(NSString *)eventType {
-    return [self trackWithEvent:eventType content:nil context:nil];
+    return [self trackWithEvent:eventType content:nil page:nil];
 }
 - (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content {
-    return [self trackWithEvent:eventType content:content context:nil];
+    return [self trackWithEvent:eventType content:content page:nil];
 }
-- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context {
+- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(nullable Class)cls {
     
     if (!_isOpenAnalytics) return;
     
     NSMutableDictionary *event = [MHSAnalyticsDataContainer dataContainer].baseProperties;
     event[@"eventType"] = eventType;
     event[@"content"] = content;
-    event[@"context"] = context;
+    event[@"page"] = [MHSAnalyticsDataContainer dataContainer].pageMap[NSStringFromClass(cls)];
     dispatch_async(self.serialQueue, ^{
         [self printEvent:event];
         [self.database insertEvent:event];
@@ -250,4 +264,30 @@ static MHSAnalytics *sharedInstance = nil;
 {
     [self flush];
 }
+@end
+
+
+#pragma mark - 曝光
+@implementation MHSAnalytics (Exposure)
+
+- (void)exposureShowWithEvent:(NSString *)eventType
+{
+    self.exposureTimer[eventType] = @([MHSAnalytics systemUpTime]);
+}
+
+- (void)exposureHideWithEvent:(NSString *)eventType
+{
+    [self exposureHideWithEvent:eventType content:nil page:nil];
+}
+
+- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(nullable Class)cls
+{
+    double beginTime = [self.exposureTimer[eventType] doubleValue];
+    double currentTime = [MHSAnalytics systemUpTime];
+    double duration = currentTime - beginTime;
+    if (duration < 1) return;
+    [self trackWithEvent:eventType content:content page:cls];
+    
+}
+
 @end

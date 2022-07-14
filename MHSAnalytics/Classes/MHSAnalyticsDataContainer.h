@@ -18,7 +18,18 @@ typedef NS_ENUM(NSUInteger, MHSAnalyticsUserType) {
 
 + (instancetype)dataContainer;
 
+@property (nonatomic, copy) NSString *pageLocalURL;
+
 @property (nonatomic, strong, readonly) NSMutableDictionary<NSString *,id> *baseProperties;
+
+/**
+ page映射表
+ */
+@property (nonatomic, strong) NSMutableDictionary *pageMap;
+/**
+ page黑名单
+ */
+@property (nonatomic, strong) NSArray *ignorePageList;
 
 - (void)updateUserId:(NSString *)userId;
 - (void)updateUserType:(NSString *)userType;
