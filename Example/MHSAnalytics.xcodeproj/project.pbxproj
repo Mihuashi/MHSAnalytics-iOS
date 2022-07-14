@@ -24,6 +24,7 @@
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		AAC87B24287FC68900D61805 /* MHSExposureController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC87B23287FC68900D61805 /* MHSExposureController.m */; };
+		AAC87B27287FCA1300D61805 /* MHSAnalyticsPage.json in Resources */ = {isa = PBXBuildFile; fileRef = AAC87B26287FCA1200D61805 /* MHSAnalyticsPage.json */; };
 		F3591DF2B58C505BCCC5FFAD /* Pods_MHSAnalytics_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAC865827624469538E75407 /* Pods_MHSAnalytics_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +70,7 @@
 		AAC865827624469538E75407 /* Pods_MHSAnalytics_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MHSAnalytics_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAC87B22287FC68900D61805 /* MHSExposureController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MHSExposureController.h; sourceTree = "<group>"; };
 		AAC87B23287FC68900D61805 /* MHSExposureController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MHSExposureController.m; sourceTree = "<group>"; };
+		AAC87B26287FCA1200D61805 /* MHSAnalyticsPage.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MHSAnalyticsPage.json; sourceTree = "<group>"; };
 		F741DF1DE5DC2C51BFE554CE /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -142,6 +144,7 @@
 				6003F5A6195388D20070C39A /* MHSViewController.m */,
 				AAC87B22287FC68900D61805 /* MHSExposureController.h */,
 				AAC87B23287FC68900D61805 /* MHSExposureController.m */,
+				AAC87B26287FCA1200D61805 /* MHSAnalyticsPage.json */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
@@ -283,6 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
+				AAC87B27287FCA1300D61805 /* MHSAnalyticsPage.json in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,

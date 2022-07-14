@@ -93,6 +93,8 @@ static MHSAnalytics *sharedInstance = nil;
         [self setupListeners];
         // 开启定时器
         [self startFlushTimer];
+        
+        self.exposureTimer = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -287,7 +289,7 @@ static MHSAnalytics *sharedInstance = nil;
     double duration = currentTime - beginTime;
     if (duration < 1) return;
     [self trackWithEvent:eventType content:content page:cls];
-    
+    [self.exposureTimer removeObjectForKey:eventType];
 }
 
 @end

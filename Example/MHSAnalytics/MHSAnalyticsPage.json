@@ -1,0 +1,28 @@
+{
+    "ignorePageList": [
+        "UICompatibilityInputViewController",
+        "FtspMainViewController",
+        "WMPageController",
+        "UINavigationController",
+        "UIKeyboardHiddenViewController_Autofill",
+        "_UIRemoteInputViewController",
+        "UIAlertController",
+        "UIInputWindowController",
+        "SFPasswordPickerRemoteViewController",
+        "_SFAppAutoFillPasswordViewController",
+        "UIViewController",
+        "UICompatibilityPredictiveViewController",
+        "WKImagePreviewViewController",
+        "UIKeyboardHiddenViewController_Save",
+        "SFPasswordSavingRemoteViewController",
+        "_SFAppPasswordSavingViewController",
+        "UIEditingOverlayViewController",
+        "UIPredictionViewController",
+        "UISystemInputAssistantViewController",
+        "UISystemKeyboardDockController"
+    ],
+    "PAGEPV": {
+        "MHSViewController": "home",
+        "MHSExposureController": "exposure"
+    }
+}

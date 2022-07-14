@@ -12,14 +12,18 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [MHSAnalytics startWithServerURL:@""];
+    MHSAnalyticsConfig *config = [[MHSAnalyticsConfig alloc] initWithURL:@""];
+    config.flushBulkSize = 20;
+    config.flushInterval = 120;
+    config.pageLocalURL = [[NSBundle mainBundle] pathForResource:@"MHSAnalyticsPage" ofType:@"json"];
+    [MHSAnalytics startWithConfigOptions:config];
     //如果想控制上报触发的条数和时间间隔，请使用下面的API
 //    [MHSAnalytics startWithServerURL:@"" flushBulkSize:100 flushInterval:30];
 //    [[MHSAnalytics sharedInstance] openAnalytics:YES];//控制是否开启埋点，默认开启
 //    [[MHSAnalytics sharedInstance] privntLogs:YES];//控制台是否开启打印，默认开启
 //    [[MHSAnalytics sharedInstance] updateUserId:@""];//更新用户ID，根据业务需要
 //    [[MHSAnalytics sharedInstance] updateUserTypeWithType:MHSAnalyticsUserTypeUser];//更新用户角色，根据业务需要
-    [[MHSAnalytics sharedInstance] trackWithEvent:@""];//日志上报
+//    [[MHSAnalytics sharedInstance] trackWithEvent:@""];//日志上报
 //    [[MHSAnalytics sharedInstance]  trackWithEvent:@"" content:@{} context:@{}];//带附加属性的上报
 //    [[MHSAnalytics sharedInstance] report];//主动上报
     return YES;

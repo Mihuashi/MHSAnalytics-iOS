@@ -11,6 +11,7 @@
 #endif
 
 #import "MHSAnalytics.h"
+#import "MHSAnalyticsConfig.h"
 #import "MHSAnalyticsDatabase.h"
 #import "MHSAnalyticsDataContainer.h"
 #import "MHSAnalyticsNetwork.h"

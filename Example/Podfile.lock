@@ -1,5 +1,5 @@
 PODS:
-  - MHSAnalytics (0.1.1)
+  - MHSAnalytics (0.1.2)
 
 DEPENDENCIES:
   - MHSAnalytics (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  MHSAnalytics: a1388142e6a855eb95d2e7e5e5f11ce0caa14170
+  MHSAnalytics: b5e28c9f0b35285ecaf5983782d55f468bbfd921
 
 PODFILE CHECKSUM: aab9beb6bd9e2451ade26e694d79836d5a4487a8
 

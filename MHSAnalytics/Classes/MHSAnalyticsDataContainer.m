@@ -37,6 +37,8 @@
     self.baseProperties = [NSMutableDictionary dictionary];
     self.baseProperties[@"eventTime"] = [NSDate mhs_currentDateNormalFormat];
     self.baseProperties[@"userType"] = @"user";
+    self.pageMap = [NSMutableDictionary dictionary];
+    self.ignorePageList = [NSArray array];
 }
 
 - (void)updateBaseProperties:(NSMutableDictionary<NSString *,id> *)baseProperties

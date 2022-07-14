@@ -33,7 +33,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-    return 30;
+    return 1;
 }
 
 
@@ -53,12 +53,12 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    [[MHSAnalytics sharedInstance] exposureShowWithEvent:@"exposure_test"];
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    [[MHSAnalytics sharedInstance] exposureHideWithEvent:@"exposure_test"];
 }
 
 
