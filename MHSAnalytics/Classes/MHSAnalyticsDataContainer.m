@@ -7,8 +7,11 @@
 
 #import "MHSAnalyticsDataContainer.h"
 #import "NSDate+MHSExtension.h"
+#import "NSString+MHSDeviceInfo.h"
 @interface MHSAnalyticsDataContainer()
 @property (nonatomic, strong, readwrite) NSMutableDictionary<NSString *,id> *baseProperties;
+
+@property (nonatomic, strong) NSMutableDictionary *contextProperties;
 @end
 
 @implementation MHSAnalyticsDataContainer
@@ -27,9 +30,24 @@
 {
     self = [super init];
     if (self) {
+        self.pageMap = [NSMutableDictionary dictionary];
+        self.ignorePageList = [NSArray array];
+        [self cacheContextData];
         [self cacheContainerData];
     }
     return self;
+}
+
+- (void)cacheContextData
+{
+    self.contextProperties = [NSMutableDictionary dictionary];
+    self.contextProperties[@"ip"] = [NSString ftsp_getDeviceIPAdress];
+    self.contextProperties[@"os"] = @"iOS";
+    self.contextProperties[@"osVersion"] = UIDevice.currentDevice.systemVersion;
+    self.contextProperties[@"manufacturer"] = @"iPhone";
+    self.contextProperties[@"dimensionDictModel"] = @"iPhone";
+    self.contextProperties[@"appVersion"] = NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"];
+    self.contextProperties[@"platformType"] = @"app";
 }
 
 - (void)cacheContainerData
@@ -37,13 +55,13 @@
     self.baseProperties = [NSMutableDictionary dictionary];
     self.baseProperties[@"eventTime"] = [NSDate mhs_currentDateNormalFormat];
     self.baseProperties[@"userType"] = @"user";
-    self.pageMap = [NSMutableDictionary dictionary];
-    self.ignorePageList = [NSArray array];
+    self.baseProperties[@"context"] = self.contextProperties;
 }
 
 - (void)updateBaseProperties:(NSMutableDictionary<NSString *,id> *)baseProperties
 {
     self.baseProperties = baseProperties;
+    self.baseProperties[@"context"] = self.contextProperties;
 }
 
 - (void)updateUserId:(NSString *)userId
@@ -72,4 +90,5 @@
         self.ignorePageList = data[@"ignorePageList"];
     }
 }
+    
 @end

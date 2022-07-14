@@ -87,7 +87,6 @@ typedef void(^SAURLSessionTaskCompletionHandler)(NSData * _Nullable data, NSURLR
 //            NSLog(@"Flush events success: %@", jsonString);
             // 数据上传成功
             flushSuccess = YES;
-            NSLog(@"上报成功");
         } else {
             // 事件发送失败信息
             NSString *desc = [NSString stringWithFormat:@"Flush events error, statusCode: %d, events: %@", (int)statusCode, jsonString];
