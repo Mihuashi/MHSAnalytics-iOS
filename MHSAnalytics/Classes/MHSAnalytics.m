@@ -244,16 +244,16 @@ static MHSAnalytics *sharedInstance = nil;
 #pragma mark - Track
 @implementation MHSAnalytics (Track)
 
-- (BOOL)trackWithEvent:(NSString *)eventType page:(NSInteger)page {
-    return [self trackWithEvent:eventType content:nil page:0 controller:nil];
+- (void)trackWithEvent:(NSString *)eventType page:(NSInteger)page {
+    [self trackWithEvent:eventType content:nil page:0 controller:nil];
 }
-- (BOOL)trackWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content page:(NSInteger)page
+- (void)trackWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content page:(NSInteger)page
 {
-    return [self trackWithEvent:eventType content:content page:page controller:nil];
+    [self trackWithEvent:eventType content:content page:page controller:nil];
 }
-- (BOOL)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls {
+- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls {
     
-    if (!_isOpenAnalytics) return YES;
+    if (!_isOpenAnalytics) return;
     
     NSMutableDictionary *event = [MHSAnalyticsDataContainer dataContainer].baseProperties;
     event[@"eventType"] = eventType;
@@ -269,9 +269,6 @@ static MHSAnalytics *sharedInstance = nil;
     if (self.database.eventCount >= self.flushBulkSize) {
         [self flush];
     }
-    
-    NSString *exposeKey = [NSString stringWithFormat:@"%@-%ld",eventType,page];
-    return [self.exposureEvents[exposeKey] boolValue];
 }
 - (void)report
 {
@@ -301,6 +298,11 @@ static MHSAnalytics *sharedInstance = nil;
 
 - (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls
 {
+    [self exposureHideWithEvent:eventType content:content page:page controller:cls isImmediatly:NO];
+}
+
+- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls isImmediatly:(BOOL)isImmediatly
+{
     NSString *exposeKey = [NSString stringWithFormat:@"%@-%ld",eventType,page];
     
     if ([self.exposureEvents[exposeKey] boolValue]) return;//如果APP运行期间已经曝光过了则不再曝光
@@ -309,9 +311,18 @@ static MHSAnalytics *sharedInstance = nil;
     double currentTime = [MHSAnalytics systemUpTime];
     double duration = currentTime - beginTime;
     [self.exposureTimer removeObjectForKey:exposeKey];
-    if (duration < 1) return;
+    if (duration < 1 && !isImmediatly) return;//小于1秒并且非立即上报
     [self trackWithEvent:eventType content:content page:page controller:cls];
     self.exposureEvents[exposeKey] = @(YES);//记录已经曝光
 }
 
+- (BOOL)checkExposureWithEvent:(NSString *)eventType page:(NSInteger)page
+{
+    NSString *exposeKey = [NSString stringWithFormat:@"%@-%ld",eventType,page];
+    BOOL isExposure = [self.exposureEvents[exposeKey] boolValue];
+    if (!isExposure) {
+        [self exposureHideWithEvent:eventType content:nil page:page controller:nil isImmediatly:YES];
+    }
+    return [self.exposureEvents[exposeKey] boolValue];
+}
 @end

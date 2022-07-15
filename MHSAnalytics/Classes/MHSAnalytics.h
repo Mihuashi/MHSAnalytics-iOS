@@ -60,11 +60,10 @@ NS_ASSUME_NONNULL_BEGIN
  page：下标，如果没有则为0
  content：附加字段
  cls：所属页面
- return 是否已经曝光，如果没有曝光则返回NO
  */
-- (BOOL)trackWithEvent:(NSString *)eventType page:(NSInteger)page;
-- (BOOL)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page;
-- (BOOL)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls;
+- (void)trackWithEvent:(NSString *)eventType page:(NSInteger)page;
+- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page;
+- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls;
 //主动上报
 - (void)report;
 @end
@@ -77,6 +76,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)exposureHideWithEvent:(NSString *)eventType page:(NSInteger)page;
 - (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page;
 - (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls;
+//检查是否已经曝光 如果没有则立即曝光,返回是否已经曝光
+- (BOOL)checkExposureWithEvent:(NSString *)eventType page:(NSInteger)page;
 @end
 
 NS_ASSUME_NONNULL_END
