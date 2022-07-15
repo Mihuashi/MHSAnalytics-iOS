@@ -47,6 +47,8 @@ static NSUInteger const MHSAnalyticsDefalutFlushEventCount = 10;
 
 //记录曝光的开始时间，如果少于1秒则不上报
 @property (nonatomic, strong) NSMutableDictionary *exposureTimer;
+//记录已经曝光的埋点，在APP运行期间，1个曝光事件只传一次
+@property (nonatomic, strong) NSMutableDictionary *exposureEvents;
 @end
 
 @implementation MHSAnalytics
@@ -71,10 +73,13 @@ static MHSAnalytics *sharedInstance = nil;
     self = [super init];
     if (self) {
         
+        self.exposureTimer = [NSMutableDictionary dictionary];
+        self.exposureEvents = [NSMutableDictionary dictionary];
+        
         _flushBulkSize = config.flushBulkSize;
         _flushInterval = config.flushInterval;
 
-        NSString *queueLabel = [NSString stringWithFormat:@"cn.sensorsdata.%@.%p", self.class, self];
+        NSString *queueLabel = [NSString stringWithFormat:@"mhs.analyticsdata.%@.%p", self.class, self];
         _serialQueue = dispatch_queue_create([queueLabel UTF8String], DISPATCH_QUEUE_SERIAL);
 
 
@@ -94,7 +99,7 @@ static MHSAnalytics *sharedInstance = nil;
         // 开启定时器
         [self startFlushTimer];
         
-        self.exposureTimer = [NSMutableDictionary dictionary];
+        
     }
     return self;
 }
@@ -166,7 +171,7 @@ static MHSAnalytics *sharedInstance = nil;
         return;
     }
     NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"[Event]: %@", json);
+    NSLog(@"[MHSAnalytics-Event]: %@", json);
 #endif
 }
 
@@ -239,19 +244,22 @@ static MHSAnalytics *sharedInstance = nil;
 #pragma mark - Track
 @implementation MHSAnalytics (Track)
 
-- (void)trackWithEvent:(NSString *)eventType {
-    return [self trackWithEvent:eventType content:nil controller:nil];
+- (BOOL)trackWithEvent:(NSString *)eventType page:(NSInteger)page {
+    return [self trackWithEvent:eventType content:nil page:0 controller:nil];
 }
-- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content {
-    return [self trackWithEvent:eventType content:content controller:nil];
+- (BOOL)trackWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content page:(NSInteger)page
+{
+    return [self trackWithEvent:eventType content:content page:page controller:nil];
 }
-- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content controller:(nullable Class)cls {
+- (BOOL)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls {
     
-    if (!_isOpenAnalytics) return;
+    if (!_isOpenAnalytics) return YES;
     
     NSMutableDictionary *event = [MHSAnalyticsDataContainer dataContainer].baseProperties;
     event[@"eventType"] = eventType;
-    event[@"content"] = content;
+    NSMutableDictionary *contentProperties = [NSMutableDictionary dictionaryWithDictionary:content];
+    contentProperties[@"page"] = @(page);
+    event[@"content"] = contentProperties;
 //    event[@"page"] = [MHSAnalyticsDataContainer dataContainer].pageMap[NSStringFromClass(cls)];
     dispatch_async(self.serialQueue, ^{
         [self printEvent:event];
@@ -261,6 +269,9 @@ static MHSAnalytics *sharedInstance = nil;
     if (self.database.eventCount >= self.flushBulkSize) {
         [self flush];
     }
+    
+    NSString *exposeKey = [NSString stringWithFormat:@"%@-%ld",eventType,page];
+    return [self.exposureEvents[exposeKey] boolValue];
 }
 - (void)report
 {
@@ -291,12 +302,16 @@ static MHSAnalytics *sharedInstance = nil;
 - (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls
 {
     NSString *exposeKey = [NSString stringWithFormat:@"%@-%ld",eventType,page];
+    
+    if ([self.exposureEvents[exposeKey] boolValue]) return;//如果APP运行期间已经曝光过了则不再曝光
+    
     double beginTime = [self.exposureTimer[exposeKey] doubleValue];
     double currentTime = [MHSAnalytics systemUpTime];
     double duration = currentTime - beginTime;
     [self.exposureTimer removeObjectForKey:exposeKey];
     if (duration < 1) return;
-    [self trackWithEvent:eventType content:content controller:cls];
+    [self trackWithEvent:eventType content:content page:page controller:cls];
+    self.exposureEvents[exposeKey] = @(YES);//记录已经曝光
 }
 
 @end
