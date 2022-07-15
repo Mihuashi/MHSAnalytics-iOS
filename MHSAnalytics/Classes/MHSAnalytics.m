@@ -312,8 +312,8 @@ static MHSAnalytics *sharedInstance = nil;
     double duration = currentTime - beginTime;
     [self.exposureTimer removeObjectForKey:exposeKey];
     if (duration < 1 && !isImmediatly) return;//小于1秒并且非立即上报
-    [self trackWithEvent:eventType content:content page:page controller:cls];
     self.exposureEvents[exposeKey] = @(YES);//记录已经曝光
+    [self trackWithEvent:eventType content:content page:page controller:cls];
 }
 
 - (BOOL)checkExposureWithEvent:(NSString *)eventType page:(NSInteger)page
