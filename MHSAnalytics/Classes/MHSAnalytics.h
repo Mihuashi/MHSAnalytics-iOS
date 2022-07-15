@@ -77,7 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page;
 - (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls;
 //检查是否已经曝光 如果没有则立即曝光,返回是否已经曝光
-- (BOOL)checkExposureWithEvent:(NSString *)eventType page:(NSInteger)page;
+- (BOOL)isExposureWithEvent:(NSString *)eventType page:(NSInteger)page;
 @end
 
 NS_ASSUME_NONNULL_END

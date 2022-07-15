@@ -298,11 +298,6 @@ static MHSAnalytics *sharedInstance = nil;
 
 - (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls
 {
-    [self exposureHideWithEvent:eventType content:content page:page controller:cls isImmediatly:NO];
-}
-
-- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls isImmediatly:(BOOL)isImmediatly
-{
     NSString *exposeKey = [NSString stringWithFormat:@"%@-%ld",eventType,page];
     
     if ([self.exposureEvents[exposeKey] boolValue]) return;//如果APP运行期间已经曝光过了则不再曝光
@@ -311,18 +306,18 @@ static MHSAnalytics *sharedInstance = nil;
     double currentTime = [MHSAnalytics systemUpTime];
     double duration = currentTime - beginTime;
     [self.exposureTimer removeObjectForKey:exposeKey];
-    if (duration < 1 && !isImmediatly) return;//小于1秒并且非立即上报
-    self.exposureEvents[exposeKey] = @(YES);//记录已经曝光
-    [self trackWithEvent:eventType content:content page:page controller:cls];
+    if (duration < 1) return;//小于1秒并且非立即上报
+    dispatch_sync(self.serialQueue, ^{
+        if ([self.exposureEvents[exposeKey] boolValue]) return;//如果APP运行期间已经曝光过了则不再曝光
+        self.exposureEvents[exposeKey] = @(YES);//记录已经曝光
+        [self trackWithEvent:eventType content:content page:page controller:cls];
+    });
 }
 
-- (BOOL)checkExposureWithEvent:(NSString *)eventType page:(NSInteger)page
+
+- (BOOL)isExposureWithEvent:(NSString *)eventType page:(NSInteger)page
 {
     NSString *exposeKey = [NSString stringWithFormat:@"%@-%ld",eventType,page];
-    BOOL isExposure = [self.exposureEvents[exposeKey] boolValue];
-    if (!isExposure) {
-        [self exposureHideWithEvent:eventType content:nil page:page controller:nil isImmediatly:YES];
-    }
     return [self.exposureEvents[exposeKey] boolValue];
 }
 @end

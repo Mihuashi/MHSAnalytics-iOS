@@ -64,10 +64,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        [[MHSAnalytics sharedInstance] trackWithEvent:@"click_test"];
     }
     if (indexPath.row == 1) {
-        [[MHSAnalytics sharedInstance] trackWithEvent:@"click_test" content:nil page:self.class];
+        
     }
     if (indexPath.row == 2) {
         MHSExposureController *exposureVC = [[MHSExposureController alloc] init];
