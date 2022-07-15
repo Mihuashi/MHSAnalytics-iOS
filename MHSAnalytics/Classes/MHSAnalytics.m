@@ -252,7 +252,7 @@ static MHSAnalytics *sharedInstance = nil;
     NSMutableDictionary *event = [MHSAnalyticsDataContainer dataContainer].baseProperties;
     event[@"eventType"] = eventType;
     event[@"content"] = content;
-    event[@"page"] = [MHSAnalyticsDataContainer dataContainer].pageMap[NSStringFromClass(cls)];
+//    event[@"page"] = [MHSAnalyticsDataContainer dataContainer].pageMap[NSStringFromClass(cls)];
     dispatch_async(self.serialQueue, ^{
         [self printEvent:event];
         [self.database insertEvent:event];
