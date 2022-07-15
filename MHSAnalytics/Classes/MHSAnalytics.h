@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 //业务埋点
 - (void)trackWithEvent:(NSString *)eventType;
 - (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content;
-- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(nullable Class)cls;
+- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content controller:(nullable Class)cls;
 //主动上报
 - (void)report;
 @end
@@ -65,11 +65,11 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - 曝光
 @interface MHSAnalytics (Exposure)
 //展示
-- (void)exposureShowWithEvent:(NSString *)eventType;
+- (void)exposureShowWithEvent:(NSString *)eventType page:(NSInteger)page;
 //隐藏
-- (void)exposureHideWithEvent:(NSString *)eventType;
-- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content;
-- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(nullable Class)cls;
+- (void)exposureHideWithEvent:(NSString *)eventType page:(NSInteger)page;
+- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page;
+- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls;
 
 
 @end

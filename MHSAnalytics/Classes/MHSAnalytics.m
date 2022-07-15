@@ -240,12 +240,12 @@ static MHSAnalytics *sharedInstance = nil;
 @implementation MHSAnalytics (Track)
 
 - (void)trackWithEvent:(NSString *)eventType {
-    return [self trackWithEvent:eventType content:nil page:nil];
+    return [self trackWithEvent:eventType content:nil controller:nil];
 }
 - (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content {
-    return [self trackWithEvent:eventType content:content page:nil];
+    return [self trackWithEvent:eventType content:content controller:nil];
 }
-- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(nullable Class)cls {
+- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content controller:(nullable Class)cls {
     
     if (!_isOpenAnalytics) return;
     
@@ -272,29 +272,31 @@ static MHSAnalytics *sharedInstance = nil;
 #pragma mark - 曝光
 @implementation MHSAnalytics (Exposure)
 
-- (void)exposureShowWithEvent:(NSString *)eventType
+- (void)exposureShowWithEvent:(NSString *)eventType page:(NSInteger)page
 {
-    self.exposureTimer[eventType] = @([MHSAnalytics systemUpTime]);
+    NSString *exposeKey = [NSString stringWithFormat:@"%@-%ld",eventType,page];
+    self.exposureTimer[exposeKey] = @([MHSAnalytics systemUpTime]);
 }
 
-- (void)exposureHideWithEvent:(NSString *)eventType
+- (void)exposureHideWithEvent:(NSString *)eventType page:(NSInteger)page
 {
-    [self exposureHideWithEvent:eventType content:nil page:nil];
+    [self exposureHideWithEvent:eventType content:nil page:page controller:nil];
 }
 
--(void)exposureHideWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content
+-(void)exposureHideWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content page:(NSInteger)page
 {
-    [self exposureHideWithEvent:eventType content:content page:nil];
+    [self exposureHideWithEvent:eventType content:content page:page controller:nil];
 }
 
-- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(nullable Class)cls
+- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls
 {
-    double beginTime = [self.exposureTimer[eventType] doubleValue];
+    NSString *exposeKey = [NSString stringWithFormat:@"%@-%ld",eventType,page];
+    double beginTime = [self.exposureTimer[exposeKey] doubleValue];
     double currentTime = [MHSAnalytics systemUpTime];
     double duration = currentTime - beginTime;
+    [self.exposureTimer removeObjectForKey:exposeKey];
     if (duration < 1) return;
-    [self trackWithEvent:eventType content:content page:cls];
-    [self.exposureTimer removeObjectForKey:eventType];
+    [self trackWithEvent:eventType content:content controller:cls];
 }
 
 @end
