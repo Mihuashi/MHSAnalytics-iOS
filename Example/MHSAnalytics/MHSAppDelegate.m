@@ -15,7 +15,7 @@
     MHSAnalyticsConfig *config = [[MHSAnalyticsConfig alloc] initWithURL:@""];
     config.flushBulkSize = 20;
     config.flushInterval = 120;
-    config.pageLocalURL = [[NSBundle mainBundle] pathForResource:@"MHSAnalyticsPage" ofType:@"json"];
+//    config.pageLocalURL = [[NSBundle mainBundle] pathForResource:@"MHSAnalyticsPage" ofType:@"json"];
     [MHSAnalytics startWithConfigOptions:config];
     //如果想控制上报触发的条数和时间间隔，请使用下面的API
 //    [MHSAnalytics startWithServerURL:@"" flushBulkSize:100 flushInterval:30];

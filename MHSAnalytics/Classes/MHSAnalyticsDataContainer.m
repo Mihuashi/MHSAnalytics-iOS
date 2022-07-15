@@ -81,6 +81,7 @@
 #pragma mark - setter
 - (void)setPageLocalURL:(NSString *)pageLocalURL
 {
+    if (pageLocalURL == nil || pageLocalURL.length == 0) return;
     NSData *jsonData = [NSData dataWithContentsOfFile:pageLocalURL];
     NSDictionary *data = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
     if (data[@"PAGEPV"]) {
