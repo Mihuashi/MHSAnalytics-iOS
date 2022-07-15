@@ -68,6 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)exposureShowWithEvent:(NSString *)eventType;
 //隐藏
 - (void)exposureHideWithEvent:(NSString *)eventType;
+- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content;
 - (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(nullable Class)cls;
 
 

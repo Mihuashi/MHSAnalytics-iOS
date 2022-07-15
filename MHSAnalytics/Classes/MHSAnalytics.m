@@ -282,6 +282,11 @@ static MHSAnalytics *sharedInstance = nil;
     [self exposureHideWithEvent:eventType content:nil page:nil];
 }
 
+-(void)exposureHideWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content
+{
+    [self exposureHideWithEvent:eventType content:content page:nil];
+}
+
 - (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(nullable Class)cls
 {
     double beginTime = [self.exposureTimer[eventType] doubleValue];
