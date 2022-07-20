@@ -45,7 +45,7 @@ typedef void(^SAURLSessionTaskCompletionHandler)(NSData * _Nullable data, NSURLR
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"payload"] = [@{@"events": events ?: @""} mhs_JSONString];
 //    params[@"payload"] = @{@"events": events};
-    params[@"topic"] = @"test-topic";
+    params[@"topic"] = @"user-behavior";
     return MHSQueryStringFromParameters(params);
 }
 

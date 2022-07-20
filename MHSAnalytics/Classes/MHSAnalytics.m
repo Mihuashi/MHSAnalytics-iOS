@@ -11,7 +11,7 @@
 
 
 // 默认一次向服务器发送的条数
-static NSUInteger const MHSAnalyticsDefalutFlushEventCount = 10;
+static NSUInteger const MHSAnalyticsDefalutFlushEventCount = 20;
 
 
 @interface MHSAnalytics()
