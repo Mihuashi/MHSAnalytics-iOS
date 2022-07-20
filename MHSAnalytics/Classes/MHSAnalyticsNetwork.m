@@ -13,14 +13,15 @@ typedef void(^SAURLSessionTaskCompletionHandler)(NSData * _Nullable data, NSURLR
 
 @interface MHSAnalyticsNetwork()<NSURLSessionDelegate>
 @property (nonatomic, strong) NSURLSession *session;
+@property (nonatomic, copy) NSString *topic;
 @end
 
 @implementation MHSAnalyticsNetwork
-- (instancetype)initWithServerURL:(NSURL *)serverURL {
+- (instancetype)initWithServerURL:(NSURL *)serverURL topic:(nonnull NSString *)topic{
     self = [super init];
     if (self) {
         _serverURL = serverURL;
-
+        _topic = topic;
        // 创建默认的 session 配置对象
        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
        // 设置单个主机连接数为 5
@@ -45,7 +46,7 @@ typedef void(^SAURLSessionTaskCompletionHandler)(NSData * _Nullable data, NSURLR
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"payload"] = [@{@"events": events ?: @""} mhs_JSONString];
 //    params[@"payload"] = @{@"events": events};
-    params[@"topic"] = @"user-behavior";
+    params[@"topic"] = _topic;
     return MHSQueryStringFromParameters(params);
 }
 

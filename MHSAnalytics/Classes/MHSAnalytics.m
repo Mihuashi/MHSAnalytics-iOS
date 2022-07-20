@@ -89,7 +89,7 @@ static MHSAnalytics *sharedInstance = nil;
         //page页面路径，存储page映射关系及黑名单
         [MHSAnalyticsDataContainer dataContainer].pageLocalURL = config.pageLocalURL;
         
-        _network = [[MHSAnalyticsNetwork alloc] initWithServerURL:[NSURL URLWithString:config.serverURL]];
+        _network = [[MHSAnalyticsNetwork alloc] initWithServerURL:[NSURL URLWithString:config.serverURL] topic:config.topic];
 
         _isOpenAnalytics = YES;//默认打开上传
         _isOpenPrivnt = YES;//默认打开控制台打印

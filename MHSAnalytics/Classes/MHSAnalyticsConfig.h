@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
  上报的接口URL
  */
 @property (nonatomic, copy) NSString *serverURL;
-
+@property (nonatomic, copy) NSString *topic;
 /**
  满多少条上报 默认20条
  */

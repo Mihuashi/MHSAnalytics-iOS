@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param serverURL 服务器 URL 地址
  @return 初始化对象
  */
-- (instancetype)initWithServerURL:(NSURL *)serverURL NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithServerURL:(NSURL *)serverURL topic:(NSString *)topic NS_DESIGNATED_INITIALIZER;
 
 /**
 同步发送事件数据
