@@ -307,7 +307,7 @@ static MHSAnalytics *sharedInstance = nil;
     double duration = currentTime - beginTime;
     [self.exposureTimer removeObjectForKey:exposeKey];
     if (duration < 1) return;//小于1秒并且非立即上报
-    dispatch_sync(self.serialQueue, ^{
+    dispatch_barrier_sync(self.serialQueue, ^{
         if ([self.exposureEvents[exposeKey] boolValue]) return;//如果APP运行期间已经曝光过了则不再曝光
         self.exposureEvents[exposeKey] = @(YES);//记录已经曝光
         [self trackWithEvent:eventType content:content page:page controller:cls];
