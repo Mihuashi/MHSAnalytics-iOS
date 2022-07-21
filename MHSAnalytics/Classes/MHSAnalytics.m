@@ -294,13 +294,10 @@ static MHSAnalytics *sharedInstance = nil;
     double beginTime = [self.exposureTimer[exposeKey] doubleValue];
     double currentTime = [MHSAnalytics systemUpTime];
     double duration = currentTime - beginTime;
-    [self.exposureTimer removeObjectForKey:exposeKey];
     if (duration < 1) return;//小于1秒并且非立即上报
-    dispatch_barrier_async(self.serialQueue, ^{
-        if ([self.exposureEvents[exposeKey] boolValue]) return;//如果APP运行期间已经曝光过了则不再曝光
-        self.exposureEvents[exposeKey] = @(YES);//记录已经曝光
-        [self trackWithEvent:eventType content:content page:page inpage:inpage];
-    });
+    [self.exposureTimer removeObjectForKey:exposeKey];
+    self.exposureEvents[exposeKey] = @(YES);//记录已经曝光
+    [self trackWithEvent:eventType content:content page:page inpage:inpage];//上报曝光
 }
 
 
