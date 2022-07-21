@@ -82,7 +82,8 @@ static sqlite3_stmt *insertStmt = NULL;
 
         NSError *error = nil;
         // 将 event 转换成 json 数据
-        NSData *data = [NSJSONSerialization dataWithJSONObject:event options:NSJSONWritingPrettyPrinted error:&error];
+        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:event];
+        NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
         if (error) {
             // event 转换失败，打印 log 返回失败（NO）
             NSLog(@"JSON Serialization error: %@", error);
