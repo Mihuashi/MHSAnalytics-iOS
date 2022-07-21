@@ -251,7 +251,7 @@ static MHSAnalytics *sharedInstance = nil;
 {
     if (!_isOpenAnalytics) return;
     
-    NSMutableDictionary *event = [MHSAnalyticsDataContainer dataContainer].baseProperties;
+    NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:[MHSAnalyticsDataContainer dataContainer].baseProperties];
     event[@"eventType"] = eventType;
     NSMutableDictionary *contentProperties = [NSMutableDictionary dictionaryWithDictionary:content];
     contentProperties[@"page"] = @(page);
