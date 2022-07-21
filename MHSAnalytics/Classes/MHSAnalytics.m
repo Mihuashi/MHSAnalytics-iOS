@@ -244,21 +244,18 @@ static MHSAnalytics *sharedInstance = nil;
 #pragma mark - Track
 @implementation MHSAnalytics (Track)
 
-- (void)trackWithEvent:(NSString *)eventType page:(NSInteger)page {
-    [self trackWithEvent:eventType content:nil page:0 controller:nil];
+- (void)trackWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(NSString *)inpage{
+    [self trackWithEvent:eventType content:nil page:0 inpage:@""];
 }
-- (void)trackWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content page:(NSInteger)page
+- (void)trackWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content page:(NSInteger)page inpage:(NSString *)inpage
 {
-    [self trackWithEvent:eventType content:content page:page controller:nil];
-}
-- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls {
-    
     if (!_isOpenAnalytics) return;
     
     NSMutableDictionary *event = [MHSAnalyticsDataContainer dataContainer].baseProperties;
     event[@"eventType"] = eventType;
     NSMutableDictionary *contentProperties = [NSMutableDictionary dictionaryWithDictionary:content];
     contentProperties[@"page"] = @(page);
+    contentProperties[@"inpage"] = inpage;
     event[@"content"] = contentProperties;
 //    event[@"page"] = [MHSAnalyticsDataContainer dataContainer].pageMap[NSStringFromClass(cls)];
     dispatch_async(self.serialQueue, ^{
@@ -270,6 +267,7 @@ static MHSAnalytics *sharedInstance = nil;
         [self flush];
     }
 }
+
 - (void)report
 {
     [self flush];
@@ -280,25 +278,20 @@ static MHSAnalytics *sharedInstance = nil;
 #pragma mark - 曝光
 @implementation MHSAnalytics (Exposure)
 
-- (void)exposureShowWithEvent:(NSString *)eventType page:(NSInteger)page
+- (void)exposureShowWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(nonnull NSString *)inpage
 {
-    NSString *exposeKey = [NSString stringWithFormat:@"%@-%ld",eventType,page];
+    NSString *exposeKey = [self exposureKeyWithEvent:eventType page:page inpage:inpage];
     self.exposureTimer[exposeKey] = @([MHSAnalytics systemUpTime]);
 }
 
-- (void)exposureHideWithEvent:(NSString *)eventType page:(NSInteger)page
+- (void)exposureHideWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(nonnull NSString *)inpage
 {
-    [self exposureHideWithEvent:eventType content:nil page:page controller:nil];
+    [self exposureHideWithEvent:eventType content:nil page:page inpage:inpage];
 }
 
--(void)exposureHideWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content page:(NSInteger)page
+-(void)exposureHideWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content page:(NSInteger)page inpage:(nonnull NSString *)inpage
 {
-    [self exposureHideWithEvent:eventType content:content page:page controller:nil];
-}
-
-- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page controller:(nullable Class)cls
-{
-    NSString *exposeKey = [NSString stringWithFormat:@"%@-%ld",eventType,page];
+    NSString *exposeKey = [self exposureKeyWithEvent:eventType page:page inpage:inpage];
     
     if ([self.exposureEvents[exposeKey] boolValue]) return;//如果APP运行期间已经曝光过了则不再曝光
     
@@ -307,17 +300,24 @@ static MHSAnalytics *sharedInstance = nil;
     double duration = currentTime - beginTime;
     [self.exposureTimer removeObjectForKey:exposeKey];
     if (duration < 1) return;//小于1秒并且非立即上报
-    dispatch_barrier_sync(self.serialQueue, ^{
+    dispatch_barrier_async(self.serialQueue, ^{
         if ([self.exposureEvents[exposeKey] boolValue]) return;//如果APP运行期间已经曝光过了则不再曝光
         self.exposureEvents[exposeKey] = @(YES);//记录已经曝光
-        [self trackWithEvent:eventType content:content page:page controller:cls];
+        [self trackWithEvent:eventType content:content page:page inpage:inpage];
     });
 }
 
 
-- (BOOL)isExposureWithEvent:(NSString *)eventType page:(NSInteger)page
+
+
+- (BOOL)isExposureWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(nonnull NSString *)inpage
 {
-    NSString *exposeKey = [NSString stringWithFormat:@"%@-%ld",eventType,page];
+    NSString *exposeKey = [self exposureKeyWithEvent:eventType page:page inpage:inpage];
     return [self.exposureEvents[exposeKey] boolValue];
+}
+
+- (NSString *)exposureKeyWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(nonnull NSString *)inpage
+{
+    return [NSString stringWithFormat:@"%@-%ld-%@",eventType,page,inpage];
 }
 @end
