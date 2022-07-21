@@ -70,13 +70,12 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - 曝光
 @interface MHSAnalytics (Exposure)
 //展示
-- (void)exposureShowWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(NSString *)inpage;
-//隐藏
-- (void)exposureHideWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(NSString *)inpage;
-- (void)exposureHideWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page inpage:(NSString *)inpage;
+- (void)exposureShowWithEvent:(NSString *)eventType eventId:(NSString *)eventId;
+
+- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page inpage:(NSString *)inpage;
 
 //检查是否已经曝光 如果没有则立即曝光,返回是否已经曝光
-- (BOOL)isExposureWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(NSString *)inpage;
+- (BOOL)isExposureWithEvent:(NSString *)eventType eventId:(NSString *)eventId;
 @end
 
 NS_ASSUME_NONNULL_END

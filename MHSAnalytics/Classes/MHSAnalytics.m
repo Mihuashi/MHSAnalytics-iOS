@@ -278,20 +278,16 @@ static MHSAnalytics *sharedInstance = nil;
 #pragma mark - 曝光
 @implementation MHSAnalytics (Exposure)
 
-- (void)exposureShowWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(nonnull NSString *)inpage
+//展示
+- (void)exposureShowWithEvent:(NSString *)eventType eventId:(NSString *)eventId
 {
-    NSString *exposeKey = [self exposureKeyWithEvent:eventType page:page inpage:inpage];
+    NSString *exposeKey = [self exposureKeyWithEvent:eventType eventId:eventId];
     self.exposureTimer[exposeKey] = @([MHSAnalytics systemUpTime]);
 }
 
-- (void)exposureHideWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(nonnull NSString *)inpage
+- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page inpage:(NSString *)inpage
 {
-    [self exposureHideWithEvent:eventType content:nil page:page inpage:inpage];
-}
-
--(void)exposureHideWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content page:(NSInteger)page inpage:(nonnull NSString *)inpage
-{
-    NSString *exposeKey = [self exposureKeyWithEvent:eventType page:page inpage:inpage];
+    NSString *exposeKey = [self exposureKeyWithEvent:eventType eventId:eventId];
     
     if ([self.exposureEvents[exposeKey] boolValue]) return;//如果APP运行期间已经曝光过了则不再曝光
     
@@ -308,16 +304,14 @@ static MHSAnalytics *sharedInstance = nil;
 }
 
 
-
-
-- (BOOL)isExposureWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(nonnull NSString *)inpage
+- (BOOL)isExposureWithEvent:(NSString *)eventType eventId:(nonnull NSString *)eventId
 {
-    NSString *exposeKey = [self exposureKeyWithEvent:eventType page:page inpage:inpage];
+    NSString *exposeKey = [self exposureKeyWithEvent:eventType eventId:eventId];
     return [self.exposureEvents[exposeKey] boolValue];
 }
 
-- (NSString *)exposureKeyWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(nonnull NSString *)inpage
+- (NSString *)exposureKeyWithEvent:(NSString *)eventType eventId:(NSString *)eventId
 {
-    return [NSString stringWithFormat:@"%@-%ld-%@",eventType,page,inpage];
+    return [NSString stringWithFormat:@"%@_%@",eventType,eventId];
 }
 @end
