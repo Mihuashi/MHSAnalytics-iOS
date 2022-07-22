@@ -258,10 +258,10 @@ static MHSAnalytics *sharedInstance = nil;
     contentProperties[@"inpage"] = inpage;
     event[@"content"] = contentProperties;
 //    event[@"page"] = [MHSAnalyticsDataContainer dataContainer].pageMap[NSStringFromClass(cls)];
-    dispatch_async(self.serialQueue, ^{
+//    dispatch_async(self.serialQueue, ^{
         [self printEvent:event];
         [self.database insertEvent:event];
-    });
+//    });
 
     if (self.database.eventCount >= self.flushBulkSize) {
         [self flush];
@@ -296,9 +296,7 @@ static MHSAnalytics *sharedInstance = nil;
     double duration = currentTime - beginTime;
     if (duration < 1) return;//小于1秒并且非立即上报
     [self.exposureTimer removeObjectForKey:exposeKey];
-    dispatch_barrier_async(self.serialQueue, ^{
-        self.exposureEvents[exposeKey] = @(YES);//记录已经曝光
-    });
+    self.exposureEvents[exposeKey] = @(YES);//记录已经曝光
     
     [self trackWithEvent:eventType content:content page:page inpage:inpage];//上报曝光
 }
