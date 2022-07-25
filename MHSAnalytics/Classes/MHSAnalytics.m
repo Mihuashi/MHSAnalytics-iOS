@@ -288,7 +288,7 @@ static MHSAnalytics *sharedInstance = nil;
 - (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page inpage:(NSString *)inpage
 {
     NSString *exposeKey = [self exposureKeyWithEvent:eventType eventId:eventId];
-    
+    if (!self.exposureEvents[exposeKey]) return;
     if ([self.exposureEvents[exposeKey] boolValue]) return;//如果APP运行期间已经曝光过了则不再曝光
     
     double beginTime = [self.exposureTimer[exposeKey] doubleValue];
@@ -305,6 +305,7 @@ static MHSAnalytics *sharedInstance = nil;
 - (BOOL)isExposureWithEvent:(NSString *)eventType eventId:(nonnull NSString *)eventId
 {
     NSString *exposeKey = [self exposureKeyWithEvent:eventType eventId:eventId];
+    if (!self.exposureEvents[exposeKey]) return NO;
     return [self.exposureEvents[exposeKey] boolValue];
 }
 
