@@ -14,6 +14,8 @@
 - (NSString *)mhs_coverDateWithForMatter:(NSString *)formatter {
     NSDateFormatter *dateformatter = [[NSDateFormatter alloc]init];
     dateformatter.dateFormat = formatter;
+    //不加这句会有部分系统出现兼容问题
+    dateformatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
     return [dateformatter stringFromDate:self];
 }
 + (NSString *)mhs_coverCurrentDateWithForMatter:(NSString *)formatter

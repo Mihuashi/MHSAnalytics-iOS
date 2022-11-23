@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MHSAnalytics'
-  s.version          = '0.3.9'
+  s.version          = '0.4.0'
   s.summary          = 'this is a analytics for MiHuaShi recommend'
 
 # This description is used to generate tags and improve search results.
