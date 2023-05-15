@@ -11,7 +11,7 @@
 @interface MHSAnalyticsDataContainer()
 @property (nonatomic, strong, readwrite) NSMutableDictionary<NSString *,id> *baseProperties;
 
-@property (nonatomic, strong) NSMutableDictionary *contextProperties;
+
 @end
 
 @implementation MHSAnalyticsDataContainer

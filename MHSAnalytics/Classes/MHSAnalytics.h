@@ -63,6 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)trackWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(NSString *)inpage;
 - (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page inpage:(NSString *)inpage;
+- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context page:(NSInteger)page inpage:(NSString *)inpage;
 //主动上报
 - (void)report;
 @end
@@ -72,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 //展示
 - (void)exposureShowWithEvent:(NSString *)eventType eventId:(NSString *)eventId;
 
-- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page inpage:(NSString *)inpage;
+- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context page:(NSInteger)page inpage:(NSString *)inpage;
 
 //检查是否已经曝光 如果没有则立即曝光,返回是否已经曝光
 - (BOOL)isExposureWithEvent:(NSString *)eventType eventId:(NSString *)eventId;

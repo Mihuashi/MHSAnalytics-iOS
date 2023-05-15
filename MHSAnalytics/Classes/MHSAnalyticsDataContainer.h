@@ -21,7 +21,7 @@ typedef NS_ENUM(NSUInteger, MHSAnalyticsUserType) {
 @property (nonatomic, copy) NSString *pageLocalURL;
 
 @property (nonatomic, strong, readonly) NSMutableDictionary<NSString *,id> *baseProperties;
-
+@property (nonatomic, strong) NSMutableDictionary *contextProperties;
 /**
  page映射表
  */
