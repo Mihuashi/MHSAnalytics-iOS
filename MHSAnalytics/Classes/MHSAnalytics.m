@@ -262,7 +262,7 @@ static MHSAnalytics *sharedInstance = nil;
     contentProperties[@"inpage"] = inpage;
     event[@"content"] = contentProperties;
     if (context.count) {
-        NSMutableDictionary *baseContext = [MHSAnalyticsDataContainer dataContainer].contextProperties;
+        NSMutableDictionary *baseContext = [[MHSAnalyticsDataContainer dataContainer].contextProperties mutableCopy];
         [baseContext addEntriesFromDictionary:context];
         event[@"context"] = baseContext;
     }
