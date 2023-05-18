@@ -8,7 +8,7 @@
 #import "MHSAnalytics.h"
 #import "MHSAnalyticsDatabase.h"
 #import "MHSAnalyticsNetwork.h"
-
+#import "NSDate+MHSExtension.h"
 
 // 默认一次向服务器发送的条数
 static NSUInteger const MHSAnalyticsDefalutFlushEventCount = 20;
@@ -256,6 +256,7 @@ static MHSAnalytics *sharedInstance = nil;
     if (!_isOpenAnalytics) return;
     
     NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:[MHSAnalyticsDataContainer dataContainer].baseProperties];
+    event[@"eventTime"] = [NSDate mhs_currentDateNormalFormat];
     event[@"eventType"] = eventType;
     NSMutableDictionary *contentProperties = [NSMutableDictionary dictionaryWithDictionary:content];
     contentProperties[@"page"] = [NSString stringWithFormat:@"%ld",page];
