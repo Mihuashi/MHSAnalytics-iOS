@@ -30,6 +30,11 @@ NS_ASSUME_NONNULL_BEGIN
 @return 初始化对象
 */
 - (BOOL)flushEvents:(NSArray *)events;
+
+/**
+ 获取服务器时间
+ */
+- (void)getServerTimeWithCompletion:(void(^)(NSTimeInterval timestamp))completion;
 @end
 
 NS_ASSUME_NONNULL_END

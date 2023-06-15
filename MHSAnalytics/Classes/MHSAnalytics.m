@@ -49,6 +49,9 @@ static NSUInteger const MHSAnalyticsDefalutFlushEventCount = 20;
 @property (nonatomic, strong) NSMutableDictionary *exposureTimer;
 //记录已经曝光的埋点，在APP运行期间，1个曝光事件只传一次
 @property (nonatomic, strong) NSMutableDictionary *exposureEvents;
+
+//时间偏差值，防止手动调时间
+@property (nonatomic, assign) NSTimeInterval timeDiffValue;
 @end
 
 @implementation MHSAnalytics
@@ -222,6 +225,26 @@ static MHSAnalytics *sharedInstance = nil;
     self.applicationDidEnterBackground = NO;
     // 开始计时器
     [self startFlushTimer];
+    // 时间校对
+    [self requestSeverTime];
+}
+
+- (void)requestSeverTime
+{
+    __weak typeof(self) weakSelf = self;
+    [self.network getServerTimeWithCompletion:^(NSTimeInterval timestamp) {
+        [weakSelf repeatLocalTime:timestamp];
+    }];
+}
+
+//本地时间校对
+- (void)repeatLocalTime:(NSTimeInterval)serverTime
+{
+    //获取当前时间戳
+    NSTimeInterval curTime = [MHSAnalytics currentTime];
+    if (fabs(serverTime - curTime) > 10) {
+        self.timeDiffValue = serverTime - curTime;
+    }
 }
 
 #pragma mark - Property
@@ -256,7 +279,10 @@ static MHSAnalytics *sharedInstance = nil;
     if (!_isOpenAnalytics) return;
     
     NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:[MHSAnalyticsDataContainer dataContainer].baseProperties];
-    event[@"eventTime"] = [NSDate mhs_currentDateNormalFormat];
+    //获取校验后时间戳
+    NSTimeInterval timestamp = [MHSAnalytics currentTime] + self.timeDiffValue;
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp];
+    event[@"eventTime"] = [date mhs_coverDateWithForMatter:@"yyyy-MM-dd HH:mm:ss Z"];
     event[@"eventType"] = eventType;
     NSMutableDictionary *contentProperties = [NSMutableDictionary dictionaryWithDictionary:content];
     contentProperties[@"page"] = [NSString stringWithFormat:@"%ld",page];

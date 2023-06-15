@@ -15,7 +15,7 @@
     NSDateFormatter *dateformatter = [[NSDateFormatter alloc]init];
     dateformatter.dateFormat = formatter;
     //不加这句会有部分系统出现兼容问题
-    dateformatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
+    dateformatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     return [dateformatter stringFromDate:self];
 }
 + (NSString *)mhs_coverCurrentDateWithForMatter:(NSString *)formatter
@@ -24,6 +24,6 @@
 }
 + (NSString *)mhs_currentDateNormalFormat
 {
-    return [NSDate mhs_coverCurrentDateWithForMatter:@"yyyy-MM-dd HH:mm:ss"];
+    return [NSDate mhs_coverCurrentDateWithForMatter:@"yyyy-MM-dd HH:mm:ss Z"];
 }
 @end

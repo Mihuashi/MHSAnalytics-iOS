@@ -108,4 +108,35 @@ typedef void(^SAURLSessionTaskCompletionHandler)(NSData * _Nullable data, NSURLR
     return flushSuccess;
 }
 
+- (void)getServerTimeWithCompletion:(void (^)(NSInteger))completion
+{
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://test.mihuashi.com/api/v1/utils/infos"]];
+    // 请求方法
+    request.HTTPMethod = @"GET";
+    SAURLSessionTaskCompletionHandler handler = ^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            return;
+        }
+        // 获取请结束返回的状态码
+        NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
+        // 当状态码为 2XX 时，表示事件发送成功
+        if (statusCode >= 200 && statusCode < 300) {
+            NSError *error;
+            NSDictionary *resultDic = [NSJSONSerialization JSONObjectWithData:data
+                                                                      options:NSJSONReadingMutableContainers
+                                                                        error:&error];
+            if (!error && resultDic.count) {
+                NSTimeInterval timestamp = [resultDic[@"timestamp"] doubleValue];
+                !completion ?: completion(timestamp);
+            }
+        } else {
+            
+        }
+    };
+
+    // 通过 request 创建请求任务
+    NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:handler];
+    // 执行任务
+    [task resume];
+}
 @end
