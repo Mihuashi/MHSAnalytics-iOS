@@ -108,9 +108,9 @@ typedef void(^SAURLSessionTaskCompletionHandler)(NSData * _Nullable data, NSURLR
     return flushSuccess;
 }
 
-- (void)getServerTimeWithCompletion:(void (^)(NSInteger))completion
+- (void)getServerTimeWithCompletion:(void (^)(NSTimeInterval))completion
 {
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://test.mihuashi.com/api/v1/utils/infos"]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://www.mihuashi.com/api/v1/utils/infos"]];
     // 请求方法
     request.HTTPMethod = @"GET";
     SAURLSessionTaskCompletionHandler handler = ^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
