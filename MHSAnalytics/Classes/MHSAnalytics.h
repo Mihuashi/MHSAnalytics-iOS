@@ -74,6 +74,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)exposureShowWithEvent:(NSString *)eventType eventId:(NSString *)eventId;
 
 - (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context page:(NSInteger)page inpage:(NSString *)inpage;
+//是否忽视1s的限制，只判断是否曝光过
+- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context page:(NSInteger)page inpage:(NSString *)inpage ignoreDuration:(BOOL)ignoreDuration;
 
 //检查是否已经曝光 如果没有则立即曝光,返回是否已经曝光
 - (BOOL)isExposureWithEvent:(NSString *)eventType eventId:(NSString *)eventId;
