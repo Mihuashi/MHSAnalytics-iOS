@@ -267,14 +267,14 @@ static MHSAnalytics *sharedInstance = nil;
 #pragma mark - Track
 @implementation MHSAnalytics (Track)
 
-- (void)trackWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(NSString *)inpage{
-    [self trackWithEvent:eventType content:nil context:nil page:page inpage:inpage];
+- (void)trackWithEvent:(NSString *)eventType {
+    [self trackWithEvent:eventType content:nil context:nil];
 }
-- (void)trackWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content page:(NSInteger)page inpage:(NSString *)inpage
+- (void)trackWithEvent:(NSString *)eventType content:(NSDictionary<NSString *,id> *)content
 {
-    [self trackWithEvent:eventType content:content context:nil page:page inpage:inpage];
+    [self trackWithEvent:eventType content:content context:nil];
 }
-- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context page:(NSInteger)page inpage:(nonnull NSString *)inpage
+- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context
 {
     if (!_isOpenAnalytics) return;
     
@@ -285,8 +285,6 @@ static MHSAnalytics *sharedInstance = nil;
     event[@"eventTime"] = [date mhs_coverDateWithForMatter:@"yyyy-MM-dd HH:mm:ss Z"];
     event[@"eventType"] = eventType;
     NSMutableDictionary *contentProperties = [NSMutableDictionary dictionaryWithDictionary:content];
-    contentProperties[@"page"] = [NSString stringWithFormat:@"%ld",page];
-    contentProperties[@"inpage"] = inpage;
     event[@"content"] = contentProperties;
     if (context.count) {
         NSMutableDictionary *baseContext = [[MHSAnalyticsDataContainer dataContainer].contextProperties mutableCopy];
@@ -321,12 +319,12 @@ static MHSAnalytics *sharedInstance = nil;
     self.exposureTimer[exposeKey] = @([MHSAnalytics systemUpTime]);
 }
 
-- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context page:(NSInteger)page inpage:(nonnull NSString *)inpage
+- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context
 {
-    [self exposureHideWithEvent:eventType eventId:eventId content:content context:context page:page inpage:inpage ignoreDuration:NO];
+    [self exposureHideWithEvent:eventType eventId:eventId content:content context:context ignoreDuration:NO];
 }
 
-- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context page:(NSInteger)page inpage:(NSString *)inpage ignoreDuration:(BOOL)ignoreDuration
+- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context ignoreDuration:(BOOL)ignoreDuration
 {
     NSString *exposeKey = [self exposureKeyWithEvent:eventType eventId:eventId];
     
@@ -338,7 +336,7 @@ static MHSAnalytics *sharedInstance = nil;
     double duration = currentTime - beginTime;
     if (!ignoreDuration && duration < 1) return;//小于1秒并且非立即上报
     self.exposureEvents[exposeKey] = @(YES);//记录已经曝光
-    [self trackWithEvent:eventType content:content context:context page:page inpage:inpage];//上报曝光
+    [self trackWithEvent:eventType content:content context:context];//上报曝光
 }
 
 

@@ -61,9 +61,9 @@ NS_ASSUME_NONNULL_BEGIN
  content：附加字段
  cls：所属页面
  */
-- (void)trackWithEvent:(NSString *)eventType page:(NSInteger)page inpage:(NSString *)inpage;
-- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content page:(NSInteger)page inpage:(NSString *)inpage;
-- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context page:(NSInteger)page inpage:(NSString *)inpage;
+- (void)trackWithEvent:(NSString *)eventType;
+- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content;
+- (void)trackWithEvent:(NSString *)eventType content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context;
 //主动上报
 - (void)report;
 @end
@@ -73,9 +73,9 @@ NS_ASSUME_NONNULL_BEGIN
 //展示
 - (void)exposureShowWithEvent:(NSString *)eventType eventId:(NSString *)eventId;
 
-- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context page:(NSInteger)page inpage:(NSString *)inpage;
+- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context;
 //是否忽视1s的限制，只判断是否曝光过
-- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context page:(NSInteger)page inpage:(NSString *)inpage ignoreDuration:(BOOL)ignoreDuration;
+- (void)exposureHideWithEvent:(NSString *)eventType eventId:(NSString *)eventId content:(nullable NSDictionary<NSString *,id> *)content context:(nullable NSDictionary<NSString *,id> *)context ignoreDuration:(BOOL)ignoreDuration;
 
 //检查是否已经曝光 如果没有则立即曝光,返回是否已经曝光
 - (BOOL)isExposureWithEvent:(NSString *)eventType eventId:(NSString *)eventId;
