@@ -130,14 +130,32 @@ static MHSAnalytics *sharedInstance = nil;
 - (void)flush {
     dispatch_async(self.serialQueue, ^{
         // 默认一次向服务端发送 100 条数据
-        [self flushByEventCount:MHSAnalyticsDefalutFlushEventCount background:NO];
+        [self flushByEventCount:MHSAnalyticsDefalutFlushEventCount background:NO isLaunching:NO];
     });
 }
 
-- (void)flushByEventCount:(NSUInteger)count background:(BOOL)background {
+- (void)flushByEventCount:(NSUInteger)count background:(BOOL)background isLaunching:(BOOL)isLaunching {
 
     // 获取本地数据
     NSArray<NSDictionary *> *events = [self.database selectEventsForCount:count];
+    if (!events.count) return;
+    //启动时检查是否有上次遗留的events,如果有的话加delayed_at上报
+    if (isLaunching) {
+        NSMutableArray *array = [NSMutableArray array];
+        NSTimeInterval timestamp = [MHSAnalytics currentTime] + self.timeDiffValue;
+        NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp];
+        NSString *delayedAt = [date mhs_coverDateWithForMatter:@"yyyy-MM-dd HH:mm:ss Z"];
+        for (NSDictionary *dict in events) {
+            NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+            if (mutableDict[@"context"]) {
+                NSMutableDictionary *context = [NSMutableDictionary dictionaryWithDictionary:mutableDict[@"context"]];
+                context[@"delayed_at"] = delayedAt;
+                mutableDict[@"context"] = context;
+            }
+            [array addObject:mutableDict];
+        }
+        events = [array copy];
+    }
     if (!_isOpenAnalytics) return;//没有打开则不上传
     // 当本地存储的数据为 0 或者上传失败时，直接返回，退出递归调用
     if (events.count == 0 || ![self.network flushEvents:events]) {
@@ -149,7 +167,7 @@ static MHSAnalytics *sharedInstance = nil;
     }
 
     // 继续上传本地的其他数据
-    [self flushByEventCount:count background:background];
+    [self flushByEventCount:count background:background isLaunching:isLaunching];
     
 }
 
@@ -205,6 +223,11 @@ static MHSAnalytics *sharedInstance = nil;
                selector:@selector(applicationDidBecomeActive:)
                    name:UIApplicationDidBecomeActiveNotification
                  object:nil];
+    
+    [center addObserver:self selector:@selector(applicationDidFinishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+    
+    [center addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
+    
 }
 
 - (void)applicationDidEnterBackground:(NSNotification *)notification {
@@ -214,7 +237,7 @@ static MHSAnalytics *sharedInstance = nil;
 
     dispatch_async(self.serialQueue, ^{
         // 发送数据
-        [self flushByEventCount:MHSAnalyticsDefalutFlushEventCount background:YES];
+        [self flushByEventCount:MHSAnalyticsDefalutFlushEventCount background:YES isLaunching:NO];
     });
 
     // 停止计时器
@@ -227,6 +250,17 @@ static MHSAnalytics *sharedInstance = nil;
     [self startFlushTimer];
     // 时间校对
     [self requestSeverTime];
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification {
+    dispatch_async(self.serialQueue, ^{
+        // 发送数据
+        [self flushByEventCount:MHSAnalyticsDefalutFlushEventCount background:YES isLaunching:YES];
+    });
+}
+
+- (void)applicationWillTerminate:(NSNotification *)notification {
+    [self report];//结束APP前全部上报
 }
 
 - (void)requestSeverTime
