@@ -25,6 +25,9 @@
 		9B7E9CDAB7FBA0FD0B583474BBCF6659 /* MHSAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = CB63C9B49045170628D963A00779E42C /* MHSAnalytics.m */; };
 		A0186D7DD6D19DF597DF93BB5C16E8BA /* MHSAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B06C30454385364A57ED81F68DB5F2E /* MHSAnalytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A8CE428299BD6045AEB199CA3F419639 /* MHSAnalyticsConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = EE0C3913F65B0786319C1F4A4A7D79B7 /* MHSAnalyticsConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AA4411372B918744008CB36A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA4411362B918744008CB36A /* PrivacyInfo.xcprivacy */; };
+		AA4411382B918744008CB36A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA4411362B918744008CB36A /* PrivacyInfo.xcprivacy */; };
+		AA4411392B918744008CB36A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA4411362B918744008CB36A /* PrivacyInfo.xcprivacy */; };
 		AAC87B2A287FE84F00D61805 /* NSString+MHSDeviceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = AAC87B28287FE84F00D61805 /* NSString+MHSDeviceInfo.h */; };
 		AAC87B2B287FE84F00D61805 /* NSString+MHSDeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC87B29287FE84F00D61805 /* NSString+MHSDeviceInfo.m */; };
 		B79D867EF6301BE4688851A3B4BC1A9F /* NSObject+MHSJson.h in Headers */ = {isa = PBXBuildFile; fileRef = 395FAFEA310946668F4DE4C2E0AAD90F /* NSObject+MHSJson.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -80,6 +83,7 @@
 		96E14F7E5D529A9FE969E93570091E38 /* MHSURLRequestSerialization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MHSURLRequestSerialization.h; path = MHSAnalytics/Classes/MHSURLRequestSerialization.h; sourceTree = "<group>"; };
 		9714A102C6DE333E33CA2E605B246F86 /* Pods-MHSAnalytics_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MHSAnalytics_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		AA4411362B918744008CB36A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA6E684CE5E6DC276F60B3FC2C7F3A63 /* Pods-MHSAnalytics_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MHSAnalytics_Example-umbrella.h"; sourceTree = "<group>"; };
 		AAC87B28287FE84F00D61805 /* NSString+MHSDeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+MHSDeviceInfo.h"; path = "MHSAnalytics/Classes/NSString+MHSDeviceInfo.h"; sourceTree = "<group>"; };
 		AAC87B29287FE84F00D61805 /* NSString+MHSDeviceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+MHSDeviceInfo.m"; path = "MHSAnalytics/Classes/NSString+MHSDeviceInfo.m"; sourceTree = "<group>"; };
@@ -157,6 +161,7 @@
 				AAC87B29287FE84F00D61805 /* NSString+MHSDeviceInfo.m */,
 				AC5C53D2CB851FA5E900705F8ED402AF /* Pod */,
 				BD17681761B3B2FDFE0980443DB30FB6 /* Support Files */,
+				AA4411362B918744008CB36A /* PrivacyInfo.xcprivacy */,
 			);
 			name = MHSAnalytics;
 			path = ../..;
@@ -403,6 +408,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA4411372B918744008CB36A /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,6 +416,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA4411392B918744008CB36A /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +424,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA4411382B918744008CB36A /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
