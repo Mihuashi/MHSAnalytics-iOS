@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MHSAnalytics : NSObject
 
+
 - (instancetype)init NS_UNAVAILABLE;
 
 /**
